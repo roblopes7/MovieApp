@@ -21,53 +21,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.udemy.movieapp.navigation.MovieNavigation
 import com.udemy.movieapp.ui.theme.MovieAppTheme
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
-                MainContent()
-            }
-        }
-    }
-}
-
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@Composable
-fun MyApp(content: @Composable () -> Unit){
-    MovieAppTheme {
-        Scaffold(topBar = {
-            TopAppBar(backgroundColor = Color.LightGray,
-            elevation = 5.dp) {
-                Text(text = "Movies")
-            }
-        } ) {
-            MainContent()
-        }
-    }
-}
-
-
-@Composable
-fun MainContent(movieList: List<String> = listOf(
-    "Kiki's Delivery Service",
-    "Ponyo",
-    "Howl's Moving Castle",
-    "Grave of the Fireflies",
-    "Princess Mononoke",
-    "Whisper of the Heart",
-    "Spirited Away",
-    "Castle in the Sky"
-)){
-
-    Column(modifier = Modifier.padding(12.dp)) {
-        LazyColumn {
-            items(items = movieList){
-                MovieRow(movie = it){
-                        movie ->
-                    Log.d("Click", "MainContent: $movie")
+                Scaffold() {
+                    MovieNavigation()
                 }
             }
         }
@@ -75,32 +39,9 @@ fun MainContent(movieList: List<String> = listOf(
 }
 
 @Composable
-fun MovieRow(movie: String, onItemClick: (String) -> Unit){
-    Card(modifier = Modifier
-        .padding(4.dp)
-        .fillMaxWidth()
-        .height(130.dp)
-        .clickable {
-
-        },
-        shape = RoundedCornerShape(corner = CornerSize(16.dp)),
-        elevation = 6.dp
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
-
-        ) {
-            Surface(modifier = Modifier
-                .padding(12.dp)
-                .size(100.dp),
-                shape = RectangleShape,
-                elevation = 4.dp
-                ) {
-            Icon(imageVector = Icons.Default.AccountBox,
-                contentDescription = "Movie Image")
-            }
-            Text(text = movie)
-        }
+fun MyApp(content: @Composable () -> Unit){
+    MovieAppTheme {
+        content()
     }
 }
 
@@ -109,6 +50,6 @@ fun MovieRow(movie: String, onItemClick: (String) -> Unit){
 @Composable
 fun DefaultPreview() {
     MyApp {
-        MainContent()
+        MovieNavigation()
     }
 }
