@@ -1,8 +1,11 @@
 package com.udemy.movieapp.screens.details
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -12,11 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.udemy.movieapp.screens.home.MainContent
+import coil.compose.rememberImagePainter
+import com.udemy.movieapp.model.Movie
+import com.udemy.movieapp.model.getMovies
+import com.udemy.movieapp.widgets.MovieRow
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun DetailsScreen(navController: NavController, movieData: String?) {
+fun DetailsScreen(navController: NavController, movieId: String?) {
+
+    val newMovieList = getMovies().filter { movie: Movie -> movie.id.equals(movieId) }
 
     Scaffold(topBar = {
         TopAppBar(
@@ -43,11 +51,33 @@ fun DetailsScreen(navController: NavController, movieData: String?) {
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Top
             ) {
-                Text(text = movieData.toString(), style = MaterialTheme.typography.h5)
+                MovieRow(movie = newMovieList.first())
+                Spacer(modifier = Modifier.height(8.dp))
+                Divider()
+                Text(text = "Movie Images")
+                HorizontalScrollableImageView(newMovieList)
             }
         }
     }
+}
 
+@Composable
+private fun HorizontalScrollableImageView(newMovieList: List<Movie>) {
+    LazyRow {
+        items(newMovieList.first().images) { image ->
+            Card(
+                modifier = Modifier
+                    .padding(12.dp)
+                    .size(240.dp),
+                elevation = 5.dp
+            ) {
+                Image(
+                    painter = rememberImagePainter(data = image),
+                    contentDescription = "Movie Poster"
+                )
+            }
+        }
+    }
 }
