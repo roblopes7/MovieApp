@@ -46,7 +46,7 @@ fun MyApp(content: @Composable () -> Unit){
 }
 
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     MyApp {
